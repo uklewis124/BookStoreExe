@@ -1,0 +1,7 @@
+flask
+pandas
+werkzeug
+jinja2
+stripe
+typing
+flask-sqlalchemy

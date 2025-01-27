@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Error 404{% endblock %}
+
+{% block content %}
+    <h1>500</h1>
+    <p>Something exploded, but we're not sure what.</p>
+    <div class="tenor-gif-embed error-img" data-postid="14178373" data-share-method="host" data-aspect-ratio="1.33333" data-width="100%"><a href="https://tenor.com/view/server-is-fine-burn-fire-spongebob-blow-gif-14178373">Server Is Fine Burn GIF</a>from <a href="https://tenor.com/search/server+is+fine-gifs">Server Is Fine GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+    <a class="btn btn-primary" href="{{ url_for('index') }}">Go back to the homepage</a>
+{% endblock %}
+
+{% block style %}
+    .Body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        height: 100rvh;
+
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        font-size: 6em;
+        color: #333;
+    }
+
+    p {
+        font-size: 1.5em;
+    }
+
+    img {
+        margin: 0 0 30px 0;
+    }
+{% endblock %}

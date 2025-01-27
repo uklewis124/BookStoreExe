@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Error 404{% endblock %}
+
+{% block content %}
+    <h1>400</h1>
+    <p>That's not how this works. That's not how any of this works.</p>
+    <svg class='error-img' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g data-name="15.Pin"><path d="M5.3 20.66C2.881 17.912 0 13.831 0 10a10 10 0 0 1 18.315-5.556l-1.662 1.112A8 8 0 0 0 2 10c0 3.208 2.611 6.85 4.8 9.34z"/><path d="M5.669 12.5A5 5 0 0 1 12.5 5.669l-1 1.731a3 3 0 0 0-4.1 4.1zM16 24a8 8 0 1 1 8-8 8.009 8.009 0 0 1-8 8zm0-14a6 6 0 1 0 6 6 6.006 6.006 0 0 0-6-6z"/><path d="m10.293 20.293 10-10 1.414 1.414-10 10z"/></g></svg>
+    <a class="btn btn-primary" href="{{ url_for('index') }}">Go back to the homepage</a>
+{% endblock %}
+
+{% block style %}
+    .Body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        height: 100rvh;
+
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        font-size: 6em;
+        color: #333;
+    }
+
+    p {
+        font-size: 1.5em;
+    }
+
+    img {
+        margin: 0 0 30px 0;
+    }
+{% endblock %}

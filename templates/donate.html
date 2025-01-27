@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <script async
+    src="https://js.stripe.com/v3/buy-button.js">
+    </script>
+
+    <stripe-buy-button
+    buy-button-id="buy_btn_1QjgqxC1SMldrHOBS7RirbzB"
+    publishable-key="pk_test_51QjgkTC1SMldrHOBk9S5M7YyaB0AmDXGtFyRAZ0PBaHsFDNWTsy08sXN4SpqNmG0wen0KbfEHuWHevZQN7ivzv3u00P7ODy29d"
+    >
+    </stripe-buy-button>
+{% endblock %}

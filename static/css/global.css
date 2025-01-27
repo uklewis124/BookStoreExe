@@ -1,0 +1,269 @@
+/* HTML & Global Css */
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Nunito Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+p, a {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Text Style CSS */
+.t-left {
+    text-align: left;
+}
+
+.t-center {
+    text-align: center;
+}
+
+.t-right {
+    text-align: right;
+}
+
+/* Button CSS */
+.btn-primary {
+    background-color: #f8f8f8;
+    color: black;
+    border: 1px solid #868686;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+
+    text-decoration: none;
+}
+
+/* Header Css */
+div.header {
+    background-color: #f8f8f8;
+    color: black;
+    width: 100%;
+
+    display: flex;
+    justify-content: space-evenly;
+
+    box-shadow: 4px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.header-search {
+    flex-direction: row !important;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 1rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.header-search img {
+    max-width: 2rem;
+}
+
+.header-search a {
+    cursor: pointer;
+}
+
+div.header .header-content {
+    display: flex;
+
+    width: max-content;
+    max-width: 40rem;
+
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+div.header .header-content.links {
+    width: 100%;
+}
+
+div.header .logo {
+    display: flex;
+    flex-direction: column;
+}
+
+div.header a {
+    text-decoration: none;
+    color: inherit;
+}
+
+div.header .logo > * {
+    margin: 0;
+}
+
+div.header .logo span {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+div.header .links img {
+    max-width: 1.5rem;
+
+    /* Center the image */
+    margin: 0 auto;
+}
+
+.heading {
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+/* Main Page Css */
+
+/** 
+ * The main page is the page that contains the main content of the website.
+ * It is the page that the user will see when they first visit the website.
+ * 
+ * The main page will contain the following sections:
+ * 1. Search bar
+ * 2. Recommended for you section
+ * 3. Popular section
+ * 4. New section
+ */
+
+/* Main Blocks Css */
+div.main-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 3rem 1rem;
+
+    width: 100%;
+
+    border-bottom: 1px solid black;
+}
+
+div.main-block:last-of-type {
+    border-bottom: none;
+}
+
+div.main-block#search-bar {
+    border-bottom: none;
+}
+
+
+
+/* Book Card Css */
+.book-card {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: 20rem;
+
+    background-color: transparent;
+    border: 0;
+
+    margin: 0.5rem;
+
+    /* Center the card contents */
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.book-card img {
+    width: 10rem;
+    height: 10rem;
+
+    /* Make image cover */
+    object-fit: cover;
+}
+
+.book-card button {
+    display: flex;
+
+    gap: 0.5rem;
+
+    padding: 0.5rem;
+    margin: 0.5rem;
+
+    cursor: pointer;
+    background-color: #f8f8f8;
+    border: 1px solid #868686;
+    border-radius: 1rem;
+
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.book-card button > img {
+    max-width: 1rem !important;
+    height: auto;
+}
+
+/* Books Card Container Css */
+div.main-block .books-container {
+    display: flex;
+    flex-direction: row;
+}
+
+div.main-block .books-container img {
+    max-width: 10rem;
+
+    /* Center image */
+    margin: 0 auto;
+}
+
+/* Search Bar Css */
+div.main-block .search-bar {
+    display: flex;
+    flex-direction: row;
+
+    width: 100%;
+    max-width: 40rem;
+
+    background-color: #f8f8f8;
+    border: 1px solid #868686;
+    border-radius: 1rem;
+
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+div.main-block .search-bar h3 {
+    margin: 0.5rem;
+
+    width: 100%;
+
+    /* TODO: Move "Find your next book" to the left */
+}
+
+div.main-block .search-bar input {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: transparent;
+
+    border: 0;
+    border-radius: 1rem;
+
+    /* Don't show border on click */
+    outline: none;
+}
+
+div .main-block .search-bar button {
+    padding: 0.5rem;
+    margin: 0.5rem;
+
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+}
+
+div.main-block .search-bar img {
+    max-width: 1.5rem;
+
+    cursor: pointer;
+}
+
+
+/* Recommended for you section */

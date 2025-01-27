@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Error 500{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>500</h1>
+        <p><strong>Technical Tantrum</strong> - This webpage is having a Tantrum. The server is confused, and so are we!</p>
+        <svg class='error-img' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g data-name="42-Speech Bubble-Question"><path d="M21 0H11A11 11 0 0 0 0 11v4a11 11 0 0 0 11 11h1v5a1 1 0 0 0 1.71.71l5.7-5.71H21a11 11 0 0 0 11-11v-4A11 11 0 0 0 21 0zm9 15a9 9 0 0 1-9 9h-2a1 1 0 0 0-.71.29L14 28.59V25a1 1 0 0 0-1-1h-2a9 9 0 0 1-9-9v-4a9 9 0 0 1 9-9h10a9 9 0 0 1 9 9z"/><path d="M21 14H11a2 2 0 0 0-2 2v1h2v-1h10v1h2v-1a2 2 0 0 0-2-2zM12 9h2v2h-2zM18 9h2v2h-2z"/></g></svg>
+    </div>
+    <div class="error-bottom">
+        <a class="btn btn-primary" href="{{ url_for('index') }}">Go back to the homepage</a><a class="btn btn-primary" id='error-log-btn'>Show Error Log</a>
+        <div class="error-container">
+            <p>An error occured in the template:</p>
+            <pre class='error-code'>
+                {{ error }}
+            </pre>
+            <pre class='error-code'>
+                Error has occured in {{ file }} on line {{ traceback }}.
+            </pre>
+        </div>
+    </div>
+{% endblock %}
+
+{% block style %}
+    .Body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        height: 100rvh;
+
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        font-size: 6em;
+        color: #333;
+    }
+
+    p {
+        font-size: 1.5em;
+    }
+
+    img {
+        margin: 0 0 30px 0;
+    }
+
+    .error-container {
+        display: none;
+        margin: 0;
+        padding: 15px;
+        box-sizing: border-box;
+        background-color: #2d2d2d;
+        border-radius: 8px;
+        color: #f8f8f2;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .error-code {
+        font-family: "Courier New", monospace; /* Monospace font for code */
+        background-color: #1e1e1e; /* Darker background for the code block */
+        color: #dcdcdc; /* Softer light text */
+        padding: 15px; /* Proper padding inside the code block */
+        margin: 10px 0; /* Add spacing above and below */
+        border-radius: 5px; /* Rounded corners */
+        border: 1px solid #444; /* Subtle border for clarity */
+        box-sizing: border-box; /* Include padding in width */
+        overflow-x: auto; /* Allow horizontal scrolling for long lines */
+        white-space: pre-wrap; /* Preserve whitespace and wrap lines */
+        word-break: break-word; /* Prevent long words from breaking the layout */
+        max-width: 100%; /* Ensure the block doesn’t overflow its parent */
+    }
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const errorLog = document.querySelector('.error-container');
+        const errorLogBtn = document.getElementById('error-log-btn');
+        const image = document.querySelector('.error-img');
+
+        errorLogBtn.addEventListener('click', () => {
+            if (errorLog.style.display === 'block') {
+                errorLog.style.display = 'none';
+                errorLogBtn.textContent = 'Show Error Log';
+                image.style.display = 'block';
+                return;
+            } else {
+                image.style.display = 'none';
+                errorLog.style.display = 'block';
+                errorLogBtn.textContent = 'Hide Error Log';
+            }
+        });
+    </script>
+{% endblock %}

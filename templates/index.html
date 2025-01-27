@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Home | {% endblock %}
+
+{% block content %}
+    <main>
+        <div class="main-block" id="search-bar">
+            <h3>Find your next book</h3>
+            <!-- on submit, post to X url -->
+            <form class="search-bar" action="{{ url_for('search') }}" method="POST">
+                <input class="search_query" id="search_query" type="text" placeholder="Search for books, authors, genres...">
+                <button><img src="{{ url_for('static', filename='img/icons/search.svg') }}"></button>
+            </form>
+        </div>
+
+        <div class="main-block">
+            <h3>Featured Books</h3>
+            <!-- For loop of books in recommended_books -->
+
+            <div class="books-container">
+            {% for book in recommended_books %}
+                <div class="book-card">
+                    <img src="{{ book.image_uri }}" alt="{{ book.title }}">
+                    <h4>{{ book.name }}</h4>
+                    <p>{{ book.author }}</p>
+                    <p>{{ book.genre }}</p>
+                    <p>{{  book.currency }}{{ book.price }}</p>
+                    <button>
+                        <img src="{{ url_for('static', filename='img/icons/add-to-cart.svg') }}" alt="Cart Icon">
+                        Add to Cart
+                    </button>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+
+        <div class="main-block">
+            <h3>Popular Books</h3>
+            <!-- For loop of book in popular_books -->
+
+            <div class="books-container">
+            {% for book in popular_books %}
+                <div class="book-card">
+                    <img src="{{ book.image }}" alt="{{ book.title }}">
+                    <h4>{{ book.title }}</h4>
+                    <p>{{ book.author }}</p>
+                    <p>{{ book.genre }}</p>
+                    <p>{{ book.price }}</p>
+                    <button>
+                        <img src="{{ url_for('static', filename='img/icons/add-to-cart.svg') }}" alt="Cart Icon">
+                        Add to Cart
+                    </button>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+
+        <div class="main-block">
+            <h3>New Books</h3>
+            <!-- For loop of book in new_books -->
+
+            <div class="books-container">
+            {% for book in new_books %}
+                <div class="book-card">
+                    <img src="{{ book.image }}" alt="{{ book.title }}">
+                    <h4>{{ book.title }}</h4>
+                    <p>{{ book.author }}</p>
+                    <p>{{ book.genre }}</p>
+                    <p>{{ book.price }}</p>
+                    <button>
+                        <img src="{{ url_for('static', filename='img/icons/add-to-cart.svg') }}" alt="Cart Icon">
+                        Add to Cart
+                    </button>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+
+        <div class="main-block">
+            <h2>Still can't find what you're looking for?</h2><br><br>
+            <a class='btn-primary' href='/#search-bar'>Try searching for it!</a>
+        </div>
+    </main>
+{% endblock %}

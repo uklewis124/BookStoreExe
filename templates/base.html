@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block title %}{% endblock %}Book Store</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+        <style>
+            .browsehappy {
+                background-color: #ffcc00;
+                color: #000;
+                text-align: center;
+                padding: 10px;
+                font-size: 14px;
+            }
+            {% block style %}{% endblock %}
+        </style>
+    </head>
+    <body>
+        <script src="" async defer></script>
+        <div class="Body">
+            <div class="header">
+                <div class="header-content">
+                    <a class="logo" href="{{ url_for('index') }}">
+                        <p class="heading"><span>Book Store</span></p>
+                        <p>The best place to buy books</p>
+                    </a>
+                </div>
+                <div class="links header-content">
+                    <a href="{{ url_for('index') }}">Home</a>
+                    <a href="#">Books</a>
+                    <a href="#">Authors</a>
+                    <a href="#">Genres</a>
+                    <a href="#">About</a>
+                    <!-- if currently on / page-->
+                    {% if request.path == '/' %}
+                        <a class="header-icons" href="#" onclick="focusSearch()" id="search-icon"><img src="{{ url_for('static', filename='img/icons/search.svg') }}" alt="Search Icon"></a>
+                    {% else %}
+                        <a class="header-icons" href="#" onclick="openSearch()" id="search-icon"><img src="{{ url_for('static', filename='img/icons/search.svg') }}" alt="Search Icon"></a>
+                    {% endif %}
+                    <a class="header-icons" href="#"><img src="{{ url_for('static', filename='img/icons/cart.svg') }}" alt="Cart Icon"></a>
+                    <a class="header-icons" href="#"><img src="{{ url_for('static', filename='img/icons/user.svg') }}" alt="User Icon"></a>
+                </div>
+            </div>
+            <div class="main-block header-search hidden" id="h-search-bar">
+                <!-- on submit, post to X url -->
+                <form class="search-bar" action="{{ url_for('search') }}" method="POST">
+                    <input id="search_query" type="text" placeholder="Search for books, authors, genres...">
+                    <button><img src="{{ url_for('static', filename='img/icons/search.svg') }}"></button>
+                </form>
+                <!-- if current page == '/' -->
+                <a onclick=closeSearch()>
+                    <img src="{{ url_for('static', filename='img/icons/cross.svg') }}" alt="Close Icon">
+                </a>
+            </div>
+            {% block content %}{% endblock %}
+        </div>
+
+        <!-- OUT OF DATE BROWSERS -->
+        <noscript>
+            <style>
+                .container {
+                    display: none;
+                }
+
+                body {
+                    display: block;
+                }
+
+                img {
+                    display: block;
+                    margin: 0 auto;
+                }
+            </style>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="https://chrome.com/download/">upgrade your browser</a> to improve your experience.</p>
+            <p class="browsehappy">Or, you are missing <strong>JavaScript</strong> permissions. Please check that <a href='https://www.wikihow.com/Enable-JavaScript'><strong>JavaScript</strong> is enabled for this website...</a></p>
+            <img src="{{ url_for('static', filename='img/errors/old.png') }}" alt="500x500 pixel">
+        </noscript>
+
+        {% block scripts %}{% endblock %}
+
+        <script>
+            const searchBar = document.getElementById('h-search-bar');
+
+            function openSearch() {
+                searchBar.classList.remove('hidden');
+            }
+
+            function closeSearch() {
+                searchBar.classList.add('hidden');
+            }
+
+            function focusSearch() {
+                document.getElementsByClassName('search_query')[0].focus();
+            }
+        </script>
+        <script>
+            if (document.documentMode || /Edge/.test(navigator.userAgent)) {
+                document.body.innerHTML = '<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="https://chrome.com/download/">upgrade your browser</a> to improve your experience.</p>';
+            }
+        </script>
+        <script>
+            document.getElementById('user-agent').textContent = navigator.userAgent;
+        </script>
+    </body>
+</html>

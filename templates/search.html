@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Home | {% endblock %}
+
+{% block content %}
+    <div class="main-block">
+        <h2>Search results for: <strong>{{ search_query }}</h2>
+        {% if books.length == 0 %}
+        {% for book in books %}
+            <div class="book-card">
+                <img src="{{ book.image }}" alt="{{ book.title }}">
+                <h4>{{ book.title }}</h4>
+                <p>{{ book.author }}</p>
+                <p>{{ book.genre }}</p>
+                <p>{{ book.price }}</p>
+                <a onclick=closeSearch()>
+                    <img src="{{ url_for('static', filename='img/icons/add-to-cart.svg') }}" alt="Cart Icon">
+                    Add to Cart
+                </a>
+            </div>
+        {% endfor %}
+        {% else %}
+            <p>No books matching `{{ search_query }}`</p>
+        {% endif %}
+    </div>
+{% endblock %}

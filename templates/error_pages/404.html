@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Error 404{% endblock %}
+
+{% block content %}
+    <h1>404</h1>
+    <p>This page has gone on a coffee break. Mabie you can find it in the kitchen?</p>
+    <img class="error-img" alt="coffee pot" src="https://www.freepatternsarea.com/wp-content/uploads/2025/01/black-white-coffee-cup-clipart-png-400x400.jpg">
+    <a class="btn btn-primary" href="{{ url_for('index') }}">Go back to the homepage</a>
+{% endblock %}
+
+{% block style %}
+    .Body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        height: 100rvh;
+
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        font-size: 6em;
+        color: #333;
+    }
+
+    p {
+        font-size: 1.5em;
+    }
+
+    img {
+        margin: 0 0 30px 0;
+    }
+{% endblock %}

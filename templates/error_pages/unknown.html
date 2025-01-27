@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Error XD{{code}}{% endblock %}
+
+{% block content %}
+    <h1>XD{{code}}</h1>
+    <p>Wow, you've found a code we don't know about!</p>
+    <div class="tenor-gif-embed error-img" data-postid="14569525189356759473" data-share-method="host" data-aspect-ratio="1.76596" data-width="100%"><a href="https://tenor.com/view/henry-stickman-stickmin-airship-card-gif-14569525189356759473">Henry Stickman GIF</a>from <a href="https://tenor.com/search/henry-gifs">Henry GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+    <a class="btn btn-primary" href="{{ url_for('index') }}">Go back to the homepage</a>
+{% endblock %}
+
+{% block style %}
+    .Body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        height: 100rvh;
+
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        font-size: 6em;
+        color: #333;
+    }
+
+    p {
+        font-size: 1.5em;
+    }
+
+    img {
+        margin: 0 0 30px 0;
+    }
+{% endblock %}
