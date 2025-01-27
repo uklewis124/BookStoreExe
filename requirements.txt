@@ -1,7 +1,8 @@
-flask
-pandas
-werkzeug
-jinja2
-stripe
-typing
+flask~=3.1.0
+pandas~=2.2.3
+werkzeug~=3.1.3
+jinja2~=3.1.5
+stripe~=11.4.1
+typing~=3.7.4.3
 flask-sqlalchemy
+SQLAlchemy~=2.0.37

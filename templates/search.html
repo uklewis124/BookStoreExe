@@ -5,22 +5,74 @@
 {% block content %}
     <div class="main-block">
         <h2>Search results for: <strong>{{ search_query }}</h2>
-        {% if books.length == 0 %}
-        {% for book in books %}
-            <div class="book-card">
-                <img src="{{ book.image }}" alt="{{ book.title }}">
-                <h4>{{ book.title }}</h4>
-                <p>{{ book.author }}</p>
-                <p>{{ book.genre }}</p>
-                <p>{{ book.price }}</p>
-                <a onclick=closeSearch()>
-                    <img src="{{ url_for('static', filename='img/icons/add-to-cart.svg') }}" alt="Cart Icon">
-                    Add to Cart
-                </a>
-            </div>
-        {% endfor %}
-        {% else %}
+        {% if not books %}
+            <p>No books found</p>
+        {% elif books.length == 0 %}
             <p>No books matching `{{ search_query }}`</p>
+        {% else %}
+            {% if len(books) < 10 %}
+                {% for book in books %}
+                    <div class="book-card">
+                        <img src="{{ book.image_uri }}" alt="{{ book.title }}">
+                        <h4>{{ book.name }}</h4>
+                        <p>{{ book.author }}</p>
+                        <p>{{ book.genre }}</p>
+                        <p>{{  book.currency }}{{ book.price }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                {% for book in books[:10] %}
+                    <div class="book-card">
+                        <img src="{{ book.image_uri }}" alt="{{ book.title }}">
+                        <h4>{{ book.name }}</h4>
+                        <p>{{ book.author }}</p>
+                        <p>{{ book.genre }}</p>
+                    </div>
+                {% endfor %}
+                <!-- button to do request to get more books -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const loadMoreButton = document.querySelector('#load-more-btn');
+                        let currentPage = 1;
+
+                        loadMoreButton.addEventListener('click', async () => {
+                            currentPage += 1;
+
+                            try {
+                                const response = await fetch(`/load-more-books?page=${currentPage}`);
+                                if (response.ok) {
+                                    const newBooks = await response.json();
+
+                                    if (newBooks.length > 0) {
+                                        const resultsDiv = document.querySelector('.main-block');
+                                        newBooks.forEach(book => {
+                                            const bookCard = document.createElement('div');
+                                            bookCard.classList.add('book-card');
+                                            bookCard.innerHTML = `
+                                <img src="${book.image_uri}" alt="${book.title}">
+                                <h4>${book.name}</h4>
+                                <p>${book.author}</p>
+                                <p>${book.genre}</p>
+                                <p>${book.currency}${book.price}</p>
+                            `;
+                                            resultsDiv.appendChild(bookCard);
+                                        });
+                                    } else {
+                                        loadMoreButton.textContent = "No more books to load";
+                                        loadMoreButton.disabled = true;
+                                    }
+                                } else {
+                                    console.error("Failed to load more books.");
+                                }
+                            } catch (error) {
+                                console.error("Error:", error);
+                            }
+                        });
+                    });
+                </script>
+
+                <button id="load-more-btn">Load more</button>
+
         {% endif %}
     </div>
 {% endblock %}

@@ -2,6 +2,10 @@
 
 {% block title %}Home | {% endblock %}
 
+{% block head %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+{% endblock %}
+
 {% block content %}
     <main>
         <div class="main-block" id="search-bar">
@@ -25,10 +29,13 @@
                     <p>{{ book.author }}</p>
                     <p>{{ book.genre }}</p>
                     <p>{{  book.currency }}{{ book.price }}</p>
-                    <button>
-                        <img src="{{ url_for('static', filename='img/icons/add-to-cart.svg') }}" alt="Cart Icon">
-                        Add to Cart
-                    </button>
+                    <form style="all: unset;" onsubmit="addToCart(event, this); return false;">
+                        <input type="hidden" name="book_id" value="{{ book.index }}">
+                        <button type="submit">
+                            <img src="{{ url_for('static', filename='img/icons/add-to-cart.svg') }}" alt="Cart Icon">
+                            Add to Cart
+                        </button>
+                    </form>
                 </div>
             {% endfor %}
             </div>
@@ -41,15 +48,18 @@
             <div class="books-container">
             {% for book in popular_books %}
                 <div class="book-card">
-                    <img src="{{ book.image }}" alt="{{ book.title }}">
-                    <h4>{{ book.title }}</h4>
+                    <img src="{{ book.image_uri }}" alt="{{ book.title }}">
+                    <h4>{{ book.name }}</h4>
                     <p>{{ book.author }}</p>
                     <p>{{ book.genre }}</p>
-                    <p>{{ book.price }}</p>
-                    <button>
-                        <img src="{{ url_for('static', filename='img/icons/add-to-cart.svg') }}" alt="Cart Icon">
-                        Add to Cart
-                    </button>
+                    <p>{{  book.currency }}{{ book.price }}</p>
+                    <form style="all: unset;" onsubmit="addToCart(event, this); return false;">
+                        <input type="hidden" name="book_id" value="{{ book.index }}">
+                        <button type="submit">
+                            <img src="{{ url_for('static', filename='img/icons/add-to-cart.svg') }}" alt="Cart Icon">
+                            Add to Cart
+                        </button>
+                    </form>
                 </div>
             {% endfor %}
             </div>
@@ -62,15 +72,34 @@
             <div class="books-container">
             {% for book in new_books %}
                 <div class="book-card">
-                    <img src="{{ book.image }}" alt="{{ book.title }}">
-                    <h4>{{ book.title }}</h4>
+                    <img src="{{ book.image_uri }}" alt="{{ book.title }}">
+                    <h4>{{ book.name }}</h4>
                     <p>{{ book.author }}</p>
                     <p>{{ book.genre }}</p>
-                    <p>{{ book.price }}</p>
-                    <button>
-                        <img src="{{ url_for('static', filename='img/icons/add-to-cart.svg') }}" alt="Cart Icon">
-                        Add to Cart
-                    </button>
+                    <p>{{  book.currency }}{{ book.price }}</p>
+                    <div class="book-card-btns">
+                        {% if not book.quantity or book.quantity > 0 %}
+                            <!-- Show quantity in cart with add and remove buttons -->
+                            <form class="book-card-form-in-cart" style="all: unset;"
+                                  onsubmit="modifyCartWithQuantity(this); return false;">
+                                <button type="button" class="btn-remove" aria-label="Decrease Quantity">−</button>
+                                <p class="book-cart-quantity" aria-label="Current Quantity">{{ book.quantity }}</p>
+                                <button type="button" class="btn-add" aria-label="Increase Quantity">+</button>
+                                <input type="hidden" name="book_id" value="{{ book.index }}">
+                            </form>
+                        {% else %}
+                            <!-- Show add to cart button -->
+                            <form class="book-card-form-in-cart" style="all: unset;"
+                                  onsubmit="addToCart(event, this); return false;">
+                                <button type="submit" class="btn-add" aria-label="Add to Cart">
+                                    <img src="{{ url_for('static', filename='img/icons/add-to-cart.svg') }}"
+                                         alt="Cart Icon">
+                                    Add to Cart
+                                </button>
+                                <input type="hidden" name="book_id" value="{{ book.index }}">
+                            </form>
+                        {% endif %}
+                    </div>
                 </div>
             {% endfor %}
             </div>
@@ -81,4 +110,117 @@
             <a class='btn-primary' href='/#search-bar'>Try searching for it!</a>
         </div>
     </main>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    function refreshBookCard(bookId, direction="down") {
+        // Called by modifyCartWithQuantity(), addToCart() when
+        // a book is added or removed from the cart. This function
+        // refreshes the book card to reflect the new quantity, and
+        // resets the card to it's original state if the quantity
+        // is 0.
+
+        // 1. Get the book card
+        const hiddenInput = document.querySelector(`input[name="book_id"][value="${bookId}"]`);
+        const bookCard = hiddenInput.closest('.book-card');
+        const bookCardForm = bookCard.querySelector('form');
+        const bookCardBtns = bookCard.querySelectorAll('button');
+
+        // 2. Get the book card's quantity
+        const bookCardQuantity = parseInt(hiddenInput.value);
+
+        // 3. If the quantity is 0, reset the card to it's original state
+        if (bookCardQuantity === 0) {
+            bookCard.classList.add('book-card-empty');
+            bookCardForm.style.display = 'none';
+            bookCardBtns.forEach(btn => btn.style.display = 'none');
+            return;
+        }
+    }
+
+    function modifyCartWithQuantity(form) {
+        const clickedButton = event.target;
+
+        const formData = new FormData(form);
+        const bookId = formData.get('book_id');
+
+        // Check which button was pressed
+        if (clickedButton.classList.contains('btn-add')) {
+            console.log('Add to Cart pressed for Book ID:', bookId);
+
+            // API request
+            fetch('/api/v1/cart/add/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ bookId: bookId }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to add to Cart');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Add Success:', data);
+                })
+                .catch(error => console.error('Add Error:', error));
+        } else if (clickedButton.classList.contains('btn-remove')) {
+            console.log('Remove from Cart pressed for Book ID:', bookId);
+
+            // API Request
+            fetch('/api/v1/cart/remove/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ bookId: bookId }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to remove from Cart');
+                    }
+                    return response.json();
+        })
+            .then(data => {
+                    console.log('Remove Success:', data);
+                })
+                .catch(error => console.error('Remove Error:', error));
+    }}
+
+    function addToCart(event, form) {
+        event.preventDefault();
+
+        // Create FormData object
+        const formData = new FormData(form);
+
+        // Get the value of the hidden input with name or ID as 'book_id'
+        const bookId = formData.get('book_id');
+
+        // Send a POST request to the server
+        fetch('/api/v1/cart/add/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({bookId: bookId})
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch(error => console.error('Error:', error));
+
+
+        // Log bookId
+        console.debug("Book ID: " + bookId);
+    }
+    </script>
 {% endblock %}

@@ -19,18 +19,6 @@ class Books(db.Model):
     price = db.Column(db.String)
     currency = db.Column(db.String)
     old_price = db.Column(db.Float)
-    isbn = db.Column(db.Integer, unique=True)
+    isbn = db.Column(db.Integer)
     category = db.Column(db.String)
     img_paths = db.Column(db.String)
-
-def load_books():
-    global df
-
-    csv_location = f"{os.getcwd()}\\instance\\main_dataset.csv"
-    df = pd.read_csv(csv_location)
-
-    df.to_sql('books', db.engine, if_exists='replace', index=True)
-
-def load_db_after_server():
-    ## Runs once DB is setup
-    load_books()

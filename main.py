@@ -1,29 +1,32 @@
 import flask
+import requests
 from flask import Flask, session, redirect, render_template, request, url_for
 import pandas as pd
-from werkzeug.middleware.dispatcher import DispatcherMiddleware
-from werkzeug.serving import run_simple
 import jinja2
 import stripe
 import random
 from sqlalchemy.sql.expression import func
 
-from scripts.prepare_database import db, load_db_after_server, Books
+from scripts.prepare_database import db, Books
 
 server = Flask(__name__)
 
 
 server.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 server.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+server.config['SECRET_KEY'] = 'secret'
 
 db.init_app(server)
 with server.app_context():
     db.drop_all()
     db.create_all()
-    load_db_after_server()
-
 stripe.api_key = 'rk_test_51QjgkTC1SMldrHOB4GEGcVMcWPHsCxuZaDurHGU6a7FqDCFRdwQqFhvXFy8SFYKwuOdsP9Jtpx5FwhZFbaYPlq5H00H8mzLpe7'
 
+
+def check_book_uri(book):
+    if not book.image_uri:
+        book.image_uri = str(url_for('static', filename=f'{book.img_paths}'))
+        db.session.commit()
 
 @server.route('/')
 def index():
@@ -40,8 +43,7 @@ def index():
             random_number = random.randint(0, r1)
             book = Books.query.filter_by(index=int(random_number)).first()
             if book:  # Ensure that the book exists before adding to the list
-                if not book.image_uri:
-                    book.image_uri = url_for('static', filename='{book.image_uri}')
+                check_book_uri(book)
                 with flask.current_app.app_context():
                     db.session.commit()
 
@@ -70,20 +72,29 @@ def login():
     return render_template('login.html')
 
 @server.route('/search/', methods=['GET', 'POST'])
-def search(): 
+@server.route('/search/<query>/', methods=['GET', 'POST'])
+def search(query:str = ""):
     # check if form is submitted from search bar
-    if request.method == "POST":
-        if request.form:
-            try:
-                query = request.form.get('search_query')
-                return render_template('search.html', search_query=query, books=temp_books) # Replace books with actual books
-            except:
-                pass
-    return render_template('search.html', search_query="", books=[])
+    if request.form:
+        query = request.form.get('search_query')
+        if not query:
+            return render_template('search.html', search_query="", books=[])
 
-@server.route('/search/<query>/')
-def search_query(query):
-    return render_template('search.html', query=query)
+    if not query:
+        return render_template('search.html', search_query="", books=[])
+
+    load_books_api = url_for('api.load_books_by_name', _external=True)
+
+    search_results = requests.get(load_books_api, params={
+        'search_query': query,
+        'page': 1
+    })
+
+    if search_results.status == "success":
+        search_results = search_results.json()['books']
+        return render_template('search.html', search_query=query, books=search_results)
+
+    return render_template('search.html', search_query="", books=[])
 
 @server.route('/e/<int:code>/')
 def error(code):
@@ -95,6 +106,10 @@ def error(code):
 import routes
 server.register_blueprint(routes.routes_bp)
 
+from scripts.load_books import load_books
+
 if __name__ == '__main__':
+    with server.app_context():
+        load_books()
     server.run(debug=True)
     
