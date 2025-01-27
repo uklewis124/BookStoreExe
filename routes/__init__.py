@@ -4,7 +4,11 @@ from .donate import donate_bp
 
 from flask import Blueprint
 
-routes_bp = Blueprint('routes_bp', __name__)
+from .misc_api import api
 
+
+routes_bp = Blueprint('routes_bp', __name__)
 routes_bp.register_blueprint(donate_bp)
 routes_bp.register_blueprint(cart)
+
+routes_bp.register_blueprint(api)

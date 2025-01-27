@@ -83,7 +83,7 @@ def search(query:str = ""):
     if not query:
         return render_template('search.html', search_query="", books=[])
 
-    load_books_api = url_for('api.load_books_by_name', _external=True)
+    load_books_api = url_for('routes_bp.api.load_books_by_name', _external=True)
 
     search_results = requests.get(load_books_api, params={
         'search_query': query,
