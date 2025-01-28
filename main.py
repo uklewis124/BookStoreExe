@@ -63,14 +63,6 @@ def index():
         new_books=new_books
     )
 
-@server.route('/register/')
-def register():
-    return render_template('register.html')
-
-@server.route('/login/')
-def login():
-    return render_template('login.html')
-
 @server.route('/search/', methods=['GET', 'POST'])
 @server.route('/search/<query>/', methods=['GET', 'POST'])
 def search(query:str = ""):

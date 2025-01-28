@@ -175,10 +175,10 @@ div.main-block#search-bar {
 
 .book-card img {
     width: 10rem;
-    height: 10rem;
+    height: 17rem;
 
     /* Make image cover */
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .book-card button {
